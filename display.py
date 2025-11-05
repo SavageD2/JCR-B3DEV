@@ -1,5 +1,5 @@
 """
-Module d'affichage - Gère tous les affichages console
+Module d'affichage - Gère tous les affichages sur la console
 """
 
 def show_welcome(store_name: str, product: str, price: float, quantity: int, 

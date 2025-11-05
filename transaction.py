@@ -1,5 +1,5 @@
 """
-Module de transaction - Gère les calculs et opérations d'achat
+Module de transaction - Gère les calculs et opérations
 """
 
 def calculate_price_ttc(price_ht: float, tva_rate: float) -> float:

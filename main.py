@@ -1,6 +1,6 @@
 """
 Programme principal - Gestion de boutique ChossettZ
-Point d'entrée du programme qui orchestre les différents modules
+Point d'entrée du programme qui orchestre les différents modules :)
 """
 
 # Imports des modules

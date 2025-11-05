@@ -1,5 +1,5 @@
 """
-Module utilitaire - Fonctions de vérification et alertes
+Module utilitaire - Fonctions de vérification et alertes liées au stock et aux fonds
 """
 
 def check_stock_alerts(quantity: int, price: float) -> None:
