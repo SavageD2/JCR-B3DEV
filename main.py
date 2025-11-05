@@ -3,11 +3,11 @@ Programme principal - Gestion de boutique ChossettZ
 Point d'entrée du programme qui orchestre les différents modules :)
 """
 
-# Imports des modules
-import config
-from display import show_welcome, show_invoice, show_transaction_success, show_variable_types
-from transaction import calculate_price_ttc, calculate_total_ht, calculate_total_ttc, process_purchase
-from utils import check_stock_alerts, get_user_quantity
+# Imports des modules depuis le package app
+from app import config
+from app.display import show_welcome, show_invoice, show_transaction_success, show_variable_types
+from app.transaction import calculate_price_ttc, calculate_total_ht, calculate_total_ttc, process_purchase
+from app.utils import check_stock_alerts, get_user_quantity
 
 
 def main():

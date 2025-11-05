@@ -7,11 +7,14 @@ Projet de simulation de gestion d'une boutique (ChossettZ).
 ```
 JCR-Python-TP1/
 ├── venv/              # Environnement virtuel Python
+├── app/               # Package contenant tous les modules
+│   ├── __init__.py    # Rend app/ importable
+│   ├── config.py      # Configuration et variables initiales
+│   ├── display.py     # Fonctions d'affichage
+│   ├── transaction.py # Logique de transaction et calculs
+│   └── utils.py       # Fonctions utilitaires
 ├── main.py            # Point d'entrée du programme
-├── config.py          # Configuration et variables initiales
-├── display.py         # Fonctions d'affichage
-├── transaction.py     # Logique de transaction et calculs
-└── utils.py           # Fonctions utilitaires
+└── README.md          # Documentation
 ```
 
 ## Installation
@@ -32,8 +35,9 @@ python main.py
 
 ## Modules
 
-- **config.py** : Contient toutes les variables de configuration (prix, stock, comptes)
-- **display.py** : Gère tous les affichages (bienvenue, facture, types de variables)
-- **transaction.py** : Gère les calculs (TTC, montants) et le traitement des achats
-- **utils.py** : Fonctions utilitaires (alertes de stock, input utilisateur)
+- **app/config.py** : Contient toutes les variables de configuration (prix, stock, comptes)
+- **app/display.py** : Gère tous les affichages (bienvenue, facture, types de variables)
+- **app/transaction.py** : Gère les calculs (TTC, montants) et le traitement des achats
+- **app/utils.py** : Fonctions utilitaires (alertes de stock, input utilisateur)
+- **app/__init__.py** : Transforme le dossier app/ en package Python importable
 - **main.py** : Orchestre le flux du programme en appelant les différents modules
