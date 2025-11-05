@@ -1,73 +1,82 @@
-### Nos variables initiales
-store_name: str = "ChossettZ"
-product: str = "Chaussettes"
-price: float = 5.99
-quantity: int = 20
-tva_rate: float = 0.20
-client_account_balance: float = 100.0
-store_account_balance: float = 0.0
+"""
+Programme principal - Gestion de boutique ChossettZ
+Point d'entrée du programme qui orchestre les différents modules
+"""
 
-### La phrase de bienvenue et d'information concernant la boutique (Hello btw ^^)
-print(f"""Bienvenue chez {store_name}!
-      Nous vendons des {product} à {price}€ HT
-      en quantité de {quantity} unités. 
-      La TVA est de {tva_rate*100}%. 
-      Votre solde actuel est de {client_account_balance}€. 
-      En espérant vous voir bientôt! Le solde de la boutique est de {store_account_balance}€.""")
+# Imports des modules
+import config
+from display import show_welcome, show_invoice, show_transaction_success, show_variable_types
+from transaction import calculate_price_ttc, calculate_total_ht, calculate_total_ttc, process_purchase
+from utils import check_stock_alerts, get_user_quantity
 
-### Demande d'achat
-buy_socks: str = input("Combien de chaussettes souhaitez-vous acheter ? ")
 
-### Conversion de la réponse en entier et vérifications du stock et des fonds diponibles
-buy_socks_int: int = int(buy_socks)
-if buy_socks_int > quantity:
-    print("Stock insuffisant!")
-    exit()
-else:
-    montant_ht: float = price * buy_socks_int
-    price_ttc: float = price * (1 + tva_rate)
-    montant_ttc: float = price_ttc * buy_socks_int
+def main():
+    """Fonction principale du programme"""
+    
+    # Afficher le message de bienvenue
+    show_welcome(
+        config.store_name, 
+        config.product, 
+        config.price, 
+        config.quantity,
+        config.tva_rate, 
+        config.client_account_balance, 
+        config.store_account_balance
+    )
+    
+    # Demander à l'utilisateur combien il souhaite acheter
+    buy_quantity: int = get_user_quantity()
+    
+    # Calculer les montants
+    price_ttc: float = calculate_price_ttc(config.price, config.tva_rate)
+    montant_ht: float = calculate_total_ht(config.price, buy_quantity)
+    montant_ttc: float = calculate_total_ttc(price_ttc, buy_quantity)
+    
     print(f"Le montant total TTC est de {montant_ttc}€.")
-
-    if montant_ttc > client_account_balance:
-        print("Fonds insuffisants!")
+    
+    # Traiter l'achat
+    new_client_balance, new_store_balance, new_stock, success = process_purchase(
+        buy_quantity,
+        config.quantity,
+        montant_ttc,
+        config.client_account_balance,
+        config.store_account_balance
+    )
+    
+    # Si l'achat a réussi
+    if success:
+        # Mettre à jour les variables de config
+        config.client_account_balance = new_client_balance
+        config.store_account_balance = new_store_balance
+        config.quantity = new_stock
+        
+        # Afficher le succès de la transaction
+        show_transaction_success(
+            config.client_account_balance,
+            config.store_account_balance,
+            config.quantity
+        )
+        
+        # Vérifier les alertes de stock
+        check_stock_alerts(config.quantity, config.price)
+        
+        # Afficher la facture
+        show_invoice(config.product, buy_quantity, montant_ht, price_ttc, montant_ttc)
+        
+        # Afficher les types de variables
+        show_variable_types(
+            config.store_name,
+            config.product,
+            config.price,
+            config.quantity,
+            config.tva_rate,
+            config.client_account_balance,
+            config.store_account_balance
+        )
     else:
-        client_account_balance -= montant_ttc
-        store_account_balance += montant_ttc
-        quantity -= buy_socks_int
-        print(f"""Achat réussi! 
-              Nouveau solde client: {client_account_balance}€. 
-              Nouveau solde boutique: {store_account_balance}€. 
-              Stock restant: {quantity} unités.""") 
-
-### Gestion du stock avec alertes en cas de faible quantité  
-if quantity < 10:
-    print("Stock bientôt épuisé!")
-if quantity < 15 and quantity > 10 and price > 5:
-    print("Produit bientôt en rupture!")
-
-### Affichage de la facture    
-montant_ttc_str: str = f"{montant_ttc:.2f}€" # avec formatage : montant_ttc_str: str = str(montant_ttc) + "€"
-print("""---------------------------------------------------------------
-ChossetZ
----------------------------------------------------------------""")
-print(f"""Produit:                        qte           ht
-{product}-------------------   {buy_socks_int}        {montant_ht:.2f}€
-
-                                            Total HT: {price_ttc:.2f}€
-                                            TVA:{montant_ttc - montant_ht:.2f}€
-                                            Total TTC: {montant_ttc_str}
----------------------------------------------------------------""")
-
-### Merci d'avoir acheté chez ChossettZ ^^
-print("Merci pour votre achat et à bientôt chez ChossettZ!")
+        # L'achat a échoué (stock ou fonds insuffisants)
+        exit()
 
 
-### Affichage des types de variables dans la console
-print(f"Type de store_name: {type(store_name)}")
-print(f"Type de product: {type(product)}")
-print(f"Type de price: {type(price)}")
-print(f"Type de quantity: {type(quantity)}")
-print(f"Type de tva_rate: {type(tva_rate)}")
-print(f"Type de client_account_balance: {type(client_account_balance)}")
-print(f"Type de store_account_balance: {type(store_account_balance)}")
+if __name__ == "__main__":
+    main()
